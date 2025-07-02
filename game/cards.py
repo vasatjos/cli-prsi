@@ -1,7 +1,9 @@
 from random import shuffle
 from card_utils import Suit, Rank, CardEffect
+from functools import total_ordering
 
 
+@total_ordering
 class Card:
     def __init__(self, suit: Suit, rank: Rank) -> None:
         self.suit = suit
@@ -22,6 +24,11 @@ class Card:
 
     def __repr__(self):
         return f"{self.rank} of {self.suit}"
+
+    def __lt__(self, other) -> bool:
+        return (
+            self.rank < other.rank or self.rank == other.rank and self.suit < other.suit
+        )
 
 
 class Deck:
