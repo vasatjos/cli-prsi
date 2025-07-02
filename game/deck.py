@@ -1,17 +1,24 @@
 from random import shuffle
-from utils import Suit, Rank
+from utils import Suit, Rank, CardEffect
 
 
 class Card:
     def __init__(self, suit: Suit, rank: Rank) -> None:
         self.suit = suit
         self.rank: Rank = rank
-        self.effect = None
 
-        self._init_effect()
+        self.effect: CardEffect | None
+        self._init_effect(rank)
 
-    def _init_effect(self) -> None:
-        pass
+    def _init_effect(self, rank) -> None:
+        if rank is Rank.SEVEN:
+            self.effect = CardEffect.DRAW_TWO
+        elif rank is Rank.OBER:
+            self.effect = CardEffect.CHANGE_SUIT
+        elif rank is Rank.ACE:
+            self.effect = CardEffect.SKIP_TURN
+        else:
+            self.effect = None
 
     def __repr__(self):
         return f"{self.rank} of {self.suit}"

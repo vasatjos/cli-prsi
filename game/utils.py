@@ -1,4 +1,5 @@
-from enum import StrEnum, IntEnum
+from enum import Enum, StrEnum, IntEnum
+
 
 class Suit(StrEnum):
     HEARTS = "hearts"
@@ -19,8 +20,15 @@ class Rank(IntEnum):
     KING = 13
     ACE = 14
 
-class Effect:
-    pass
 
-class EffectManager:  # maybe?
-    pass
+class CardEffect(Enum):
+    SKIP = 0
+    CHANGE_SUIT = 1
+    DRAW = 2
+
+
+class GameEffectManager:
+    """Class which handles the stacking of card effects in the game loop."""
+
+    def __init__(self) -> None:
+        pass
