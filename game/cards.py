@@ -35,12 +35,16 @@ class Deck:
     CARD_COUNT = len(Suit) * 8
 
     def __init__(self) -> None:
+        self.playing_pile: list[Card]
+        self.drawpile: list[Card]
+        self.next_player_effect: CardEffect | None
+
         self.reset_deck()
-        self.next_player_effect: CardEffect | None = None
 
     def reset_deck(self) -> None:
         self.playing_pile: list[Card] = []
         self._init_drawpile()
+        self.next_player_effect: CardEffect | None = None
 
     def _init_drawpile(self) -> None:
         self.drawpile: list[Card] = []

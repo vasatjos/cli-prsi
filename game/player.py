@@ -3,17 +3,22 @@ from cards import Card
 
 class Player:
     def __init__(self) -> None:
-        self.hand: list[Card] = []
+        self._hand_set: set[Card] = set()
 
-    def print_hand(self, hand: list[Card] | None = None) -> None:
-        if hand is None:
-            hand = self.hand
-        hand.sort()
-        for i, card in enumerate(hand, start=1):
+    def print_hand(self, cards: list[Card] | None) -> None:
+        """
+        Print given cards in a sorted order.
+        """
+
+        if cards is None:
+            cards = list(self._hand_set)
+        cards.sort()
+        for i, card in enumerate(cards, start=1):
             print(f"{i}. {card}")
 
     def select_card_to_play(self, allowed: set[Card]) -> Card | None:
-        """Select a card from the players hand which he will play.
+        """
+        Select a card from the players hand which he will play.
 
         Parameters:
           allowed: A set of cards which can be played based on the state of the game
@@ -24,8 +29,10 @@ class Player:
           Otherwise simply the card the player chose to play.
         """
 
-        player_cards = set(self.hand)
-        playable = list(player_cards.intersection(allowed))
+        playable = list(self._hand_set.intersection(allowed))
+        if len(playable) == 0:
+            input("No cards available, press enter to draw.")
+            return None
         self.print_hand(playable)
 
         valid_choice = False
@@ -41,18 +48,12 @@ class Player:
                 else:
                     valid_choice = True
             except ValueError:
-                print("Please insert a valid card number")
+                print("Please insert a valid card number.")
 
         card_index = choice - 1  # type: ignore
         if card_index >= 0:
             chosen_card = playable[card_index]
-            self.hand.remove(chosen_card)
+            self._hand_set.remove(chosen_card)
             return chosen_card
         else:
-            # TODO: Draw a card.
-            #
-            # Can be done via passing the effects as a parameter,
-            # by passing the entire effect manager instead of allowed cards,
-            # or by pulling the functionality out (prefered).
-            ...
-            return None
+            return None  # draw a card
