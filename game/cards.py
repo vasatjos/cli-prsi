@@ -5,7 +5,7 @@ from card_utils import Suit, Rank, CardEffect
 class Card:
     def __init__(self, suit: Suit, rank: Rank) -> None:
         self.suit = suit
-        self.rank: Rank = rank
+        self.rank = rank
 
         self.effect: CardEffect | None
         self._init_effect(rank)
@@ -29,19 +29,26 @@ class Deck:
 
     def __init__(self) -> None:
         self.reset_deck()
-        self.next_player_effect = None
+        self.next_player_effect: CardEffect | None = None
 
     def reset_deck(self) -> None:
-        self.playing_pile = []
+        self.playing_pile: list[Card] = []
         self._init_drawpile()
 
     def _init_drawpile(self) -> None:
-        self.drawpile = []
+        self.drawpile: list[Card] = []
         for suit in Suit:
             for rank in Rank:
                 self.drawpile.append(Card(suit, rank))
 
         shuffle(self.drawpile)
 
-    def emmit_effect(self) -> ...:
+    def draw_card(self) -> Card:
+        return self.drawpile.pop()
+
+    def play_card(self, card: Card) -> None:
+        self.playing_pile.append(card)
+        self.next_player_effect = card.effect
+
+    def emmit_effect(self) -> CardEffect | None:
         return self.next_player_effect
