@@ -1,5 +1,5 @@
 from random import shuffle
-from utils import Suit, Rank, CardEffect
+from card_utils import Suit, Rank, CardEffect
 
 
 class Card:

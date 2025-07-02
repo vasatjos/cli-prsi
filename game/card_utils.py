@@ -22,9 +22,9 @@ class Rank(IntEnum):
 
 
 class CardEffect(Enum):
-    SKIP = 0
+    SKIP_TURN = 0
     CHANGE_SUIT = 1
-    DRAW = 2
+    DRAW_TWO = 2
 
 
 class GameEffectManager:
