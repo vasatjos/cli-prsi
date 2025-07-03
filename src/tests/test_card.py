@@ -1,6 +1,4 @@
-import pytest
 from game.card import Card
-from game.deck import Deck
 from game.card_utils import Suit, Rank, CardEffect
 
 
@@ -16,6 +14,9 @@ def test_card_effects():
 def test_card_ordering():
     low = Card(Suit.HEARTS, Rank.SEVEN)
     high = Card(Suit.HEARTS, Rank.ACE)
+    same_1 = Card(Suit.BELLS, Rank.OBER)
+    same_2 = Card(Suit.BELLS, Rank.OBER)
     assert low < high
     assert not high < low
     assert high >= low
+    assert same_1 == same_2

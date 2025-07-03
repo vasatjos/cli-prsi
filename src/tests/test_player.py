@@ -1,12 +1,10 @@
-import pytest
-
 from game.card import Card
 from game.card_utils import Rank, Suit
 from game.deck import Deck
 from game.player import Player
 
 def test_choose_playing_card_allowed(monkeypatch):
-    allowed = set(Deck().drawpile)
+    allowed = set(Deck().drawing_pile)
 
     player = Player()
     c1 = Card(Suit.HEARTS, Rank.TEN)
