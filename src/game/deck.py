@@ -18,7 +18,13 @@ class Deck:
         self.drawing_pile = [Card(suit, rank) for suit in Suit for rank in Rank]
         shuffle(self.drawing_pile)
 
+    @staticmethod
+    def generate_suit(suit: Suit) -> list[Card]:
+        return [Card(suit, rank) for rank in Rank]
 
+    @staticmethod
+    def generate_rank(rank: Rank) -> list[Card]:
+        return [Card(suit, rank) for suit in Suit]
 
     def draw_card(self) -> Card:
         """
