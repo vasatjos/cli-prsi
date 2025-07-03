@@ -25,7 +25,8 @@ class Player:
             and active effects.
 
         Returns:
-          None if player chose to draw a card. Drawing logic handled by separate function.
+          None if player chose to draw a card. Drawing logic handled by separate method,
+          handling of this behaviour falls on the caller.
           Otherwise simply the card the player chose to play.
         """
 
@@ -59,3 +60,6 @@ class Player:
             return chosen_card
         else:
             return None  # draw a card
+
+    def take_drawn_cards(self, drawn_cards: list[Card]) -> None:
+        self._hand_set.update(drawn_cards)
