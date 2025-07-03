@@ -35,3 +35,15 @@ def test_play_card_sets_no_effect():
 
     assert deck.discard_pile[-1] == card
     assert effect == None
+
+def test_generate_suit():
+    for suit in Suit:
+        cards = Deck.generate_suit(suit)
+        for card in cards:
+            card.suit = suit
+
+def test_generate_rank():
+    for rank in Rank:
+        cards = Deck.generate_rank(rank)
+        for card in cards:
+            card.rank = rank

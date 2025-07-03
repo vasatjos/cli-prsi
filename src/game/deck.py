@@ -40,8 +40,7 @@ class Deck:
         # Flip over playing pile
         playing_pile_top_card = self.discard_pile.pop()
         self.drawing_pile = list(reversed(self.discard_pile))
-        self.discard_pile = []
-        self.discard_pile.append(playing_pile_top_card)
+        self.discard_pile = [playing_pile_top_card]
 
         return self.drawing_pile.pop()
 
