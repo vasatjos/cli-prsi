@@ -15,15 +15,10 @@ class Deck:
 
     def reset_deck(self) -> None:
         self.discard_pile: list[Card] = []
-        self._init_drawing_pile()
-
-    def _init_drawing_pile(self) -> None:
-        self.drawing_pile: list[Card] = []
-        for suit in Suit:
-            for rank in Rank:
-                self.drawing_pile.append(Card(suit, rank))
-
+        self.drawing_pile = [Card(suit, rank) for suit in Suit for rank in Rank]
         shuffle(self.drawing_pile)
+
+
 
     def draw_card(self) -> Card:
         """
