@@ -1,5 +1,6 @@
-from card_utils import Suit, Rank, CardEffect
 from functools import total_ordering
+
+from game.card_utils import Suit, Rank, CardEffect
 
 
 @total_ordering
