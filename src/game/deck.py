@@ -8,31 +8,49 @@ class Deck:
     CARD_COUNT = len(Suit) * 8
 
     def __init__(self) -> None:
-        self.playing_pile: list[Card]
-        self.drawpile: list[Card]
-        self.next_player_effect: CardEffect | None
+        self.discard_pile: list[Card]
+        self.drawing_pile: list[Card]
 
         self.reset_deck()
 
     def reset_deck(self) -> None:
-        self.playing_pile: list[Card] = []
-        self._init_drawpile()
-        self.next_player_effect: CardEffect | None = None
+        self.discard_pile: list[Card] = []
+        self._init_drawing_pile()
 
-    def _init_drawpile(self) -> None:
-        self.drawpile: list[Card] = []
+    def _init_drawing_pile(self) -> None:
+        self.drawing_pile: list[Card] = []
         for suit in Suit:
             for rank in Rank:
-                self.drawpile.append(Card(suit, rank))
+                self.drawing_pile.append(Card(suit, rank))
 
-        shuffle(self.drawpile)
+        shuffle(self.drawing_pile)
 
     def draw_card(self) -> Card:
-        return self.drawpile.pop()
+        """
+        Draw a card from the drawing pile.
 
-    def play_card(self, card: Card) -> None:
-        self.playing_pile.append(card)
-        self.next_player_effect = card.effect
+        If the drawing pile is empty, the discard pile gets flipped over
+        and becomes the drawing pile.
+        """
 
-    def emmit_effect(self) -> CardEffect | None:
-        return self.next_player_effect
+        if len(self.drawing_pile) > 0:
+            return self.drawing_pile.pop()
+
+        # Flip over playing pile
+        playing_pile_top_card = self.discard_pile.pop()
+        self.drawing_pile = list(reversed(self.discard_pile))
+        self.discard_pile = []
+        self.discard_pile.append(playing_pile_top_card)
+
+        return self.drawing_pile.pop()
+
+    def play_card(self, card: Card) -> CardEffect | None:
+        """
+        Take a card and put it on top of the discard pile.
+
+        Returns:
+          The effect of the played card if it has one, None otherwise.
+        """
+
+        self.discard_pile.append(card)
+        return card.effect
