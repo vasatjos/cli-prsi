@@ -43,12 +43,14 @@ class Player:
             )
             try:
                 choice = int(choice)
-                if not -1 < choice < len(playable):
-                    raise ValueError
+                if not -1 < choice <= len(playable):  # <= since 1 based indexing
+                    raise IndexError
                 else:
                     valid_choice = True
             except ValueError:
-                print("Please insert a valid card number.")
+                print("Please insert a number.")
+            except IndexError:
+                print("Inserted number too high.")
 
         card_index = choice - 1  # type: ignore
         if card_index >= 0:

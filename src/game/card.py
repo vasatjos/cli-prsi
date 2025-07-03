@@ -30,4 +30,10 @@ class Card:
             self.rank < other.rank or self.rank == other.rank and self.suit < other.suit
         )
 
+    def __eq__(self, other):
+        if not isinstance(other, Card):
+            return NotImplemented
+        return self.suit == other.suit and self.rank == other.rank
 
+    def __hash__(self):
+        return hash((self.suit, self.rank))
