@@ -23,12 +23,4 @@ class Rank(IntEnum):
 
 class CardEffect(Enum):
     SKIP_TURN = 0
-    CHANGE_SUIT = 1
     DRAW_TWO = 2
-
-
-class GameEffectManager:
-    """Class which handles the stacking of card effects in the game loop."""
-
-    def __init__(self) -> None:
-        pass

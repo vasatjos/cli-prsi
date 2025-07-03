@@ -1,0 +1,90 @@
+from game.card_utils import Rank, Suit, CardEffect
+from game.card import Card
+from game.deck import Deck
+
+
+class GameStateManager:
+    """
+    Class which handles the stacking of card effects and other
+    information not regarding players themselves.
+    """
+
+    def __init__(self) -> None:
+        self.top_card: Card | None = None
+        self.current_effect: CardEffect | None = None
+        self.effect_strength: int = 0  # values range from 0 to 4 (draw 8 cards)
+
+    def update(self, card: Card | None) -> None:
+        if card is None:
+            self.current_effect = None  # No card was played -> No effect
+            self.effect_strength = 0
+
+        elif card.rank is Rank.SEVEN:
+            self.current_effect = CardEffect.DRAW_TWO
+            self.effect_strength += 1
+            self.top_card = card
+
+        elif card.rank is Rank.ACE:
+            self.current_effect = CardEffect.SKIP_TURN
+            self.effect_strength = 1
+            self.top_card = card
+
+        elif card.rank is Rank.OBER:
+            self.current_effect = None
+            self.effect_strength = 0
+            chosen_suit = GameStateManager.get_suit_choice()
+            self.top_card = Card(chosen_suit, Rank.OBER)
+
+        else:
+            self.current_effect = None
+            self.effect_strength = 0
+            self.top_card = card
+
+    @staticmethod
+    def get_suit_choice() -> Suit:
+        suit_names = [f"({suit.value[0]}){suit.value[1:]}" for suit in Suit]
+        print(f"Available suits: {suit_names}")
+
+        valid_choice = False
+        choice = ""
+        while not valid_choice:
+            choice = input("Please choose suit (first letter): ")
+            try:
+                if len(choice) == 0:
+                    raise ValueError
+
+                choice = choice[0].lower()
+                if choice not in ["h", "l", "a", "b"]:
+                    raise ValueError
+                else:
+                    valid_choice = True
+
+            except ValueError:
+                print("Please insert a valid suit letter.")
+
+        if choice == "h":
+            return Suit.HEARTS
+        elif choice == "l":
+            return Suit.LEAVES
+        elif choice == "a":
+            return Suit.ACORNS
+        elif choice == "b":
+            return Suit.BELLS
+        else:
+            raise NotImplementedError("Suit choice failed.")
+
+    def find_allowed_cards(self) -> set[Card]:
+        if self.current_effect is CardEffect.SKIP_TURN:
+            return Deck.generate_rank(Rank.ACE)
+
+        if self.current_effect is CardEffect.DRAW_TWO:
+            return Deck.generate_rank(Rank.SEVEN)
+
+        if self.top_card is None:
+            raise NotImplementedError("find_allowed_cards called too soon.")
+
+        current_suit_cards = Deck.generate_suit(self.top_card.suit)
+        current_rank_cards = Deck.generate_rank(self.top_card.rank)
+        obers = Deck.generate_rank(Rank.OBER)
+
+        return current_suit_cards | current_rank_cards | obers

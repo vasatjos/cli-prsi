@@ -15,8 +15,6 @@ class Card:
     def _init_effect(self, rank) -> None:
         if rank is Rank.SEVEN:
             self.effect = CardEffect.DRAW_TWO
-        elif rank is Rank.OBER:
-            self.effect = CardEffect.CHANGE_SUIT
         elif rank is Rank.ACE:
             self.effect = CardEffect.SKIP_TURN
         else:

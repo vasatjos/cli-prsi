@@ -19,12 +19,12 @@ class Deck:
         shuffle(self.drawing_pile)
 
     @staticmethod
-    def generate_suit(suit: Suit) -> list[Card]:
-        return [Card(suit, rank) for rank in Rank]
+    def generate_suit(suit: Suit) -> set[Card]:
+        return {Card(suit, rank) for rank in Rank}
 
     @staticmethod
-    def generate_rank(rank: Rank) -> list[Card]:
-        return [Card(suit, rank) for suit in Suit]
+    def generate_rank(rank: Rank) -> set[Card]:
+        return {Card(suit, rank) for suit in Suit}
 
     def draw_card(self) -> Card:
         """
