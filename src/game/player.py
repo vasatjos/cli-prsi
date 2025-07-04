@@ -36,22 +36,19 @@ class Player:
             return None
         self.print_hand(playable)
 
-        valid_choice = False
-        while not valid_choice:
-            choice = input(
+        while True:
+            choice_input = input(
                 "Enter the number of the card you want to play, "
                 + "enter 0 to draw a card: "
             )
             try:
-                choice = int(choice)
-                if not -1 < choice <= len(playable):  # <= since 1 based indexing
-                    raise IndexError
-                else:
-                    valid_choice = True
+                choice = int(choice_input)
+                if not 0 <= choice <= len(playable):
+                    print("Inserted number too high.")
+                    continue
+                break  # valid input
             except ValueError:
                 print("Please insert a number.")
-            except IndexError:
-                print("Inserted number too high.")
 
         card_index = choice - 1  # type: ignore
         if card_index >= 0:

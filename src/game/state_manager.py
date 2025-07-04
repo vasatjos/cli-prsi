@@ -50,22 +50,13 @@ class GameStateManager:
         suit_names = [f"({suit.value[0]}){suit.value[1:]}" for suit in Suit]
         print(f"Available suits: {suit_names}")
 
-        valid_choice = False
-        choice = ""
-        while not valid_choice:
-            choice = input("Please choose suit (first letter): ")
-            try:
-                if len(choice) == 0:
-                    raise ValueError
+        valid_suits = {"h", "l", "a", "b"}
 
-                choice = choice[0].lower()
-                if choice not in ["h", "l", "a", "b"]:
-                    raise ValueError
-                else:
-                    valid_choice = True
-
-            except ValueError:
-                print("Please insert a valid suit letter.")
+        while True:
+            choice = input("Please choose suit (first letter): ").strip().lower()
+            if choice in valid_suits:
+                break
+            print("Please insert a valid suit letter.")
 
         if choice == "h":
             return Suit.HEARTS
