@@ -11,6 +11,7 @@ class GameStateManager:
 
     def __init__(self) -> None:
         self.top_card: Card | None = None
+        self._actual_suit: Suit | None = None
         self.current_effect: CardEffect | None = None
         self.effect_strength: int = 0  # values range from 0 to 4 (draw 8 cards)
 
@@ -23,22 +24,26 @@ class GameStateManager:
             self.current_effect = CardEffect.DRAW_TWO
             self.effect_strength += 1
             self.top_card = card
+            self._actual_suit = card.suit
 
         elif card.rank is Rank.ACE:
             self.current_effect = CardEffect.SKIP_TURN
             self.effect_strength = 1
             self.top_card = card
+            self._actual_suit = card.suit
 
         elif card.rank is Rank.OBER:
             self.current_effect = None
             self.effect_strength = 0
             chosen_suit = GameStateManager.get_suit_choice()
-            self.top_card = Card(chosen_suit, Rank.OBER)
+            self.top_card = card
+            self._actual_suit = chosen_suit
 
         else:
             self.current_effect = None
             self.effect_strength = 0
             self.top_card = card
+            self._actual_suit = card.suit
 
     @staticmethod
     def get_suit_choice() -> Suit:
@@ -80,10 +85,10 @@ class GameStateManager:
         if self.current_effect is CardEffect.DRAW_TWO:
             return Deck.generate_rank(Rank.SEVEN)
 
-        if self.top_card is None:
+        if self.top_card is None or self._actual_suit is None:
             raise NotImplementedError("find_allowed_cards called too soon.")
 
-        current_suit_cards = Deck.generate_suit(self.top_card.suit)
+        current_suit_cards = Deck.generate_suit(self._actual_suit)
         current_rank_cards = Deck.generate_rank(self.top_card.rank)
         obers = Deck.generate_rank(Rank.OBER)
 
