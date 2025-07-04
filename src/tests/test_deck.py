@@ -39,11 +39,13 @@ def test_play_card_sets_no_effect():
 def test_generate_suit():
     for suit in Suit:
         cards = Deck.generate_suit(suit)
+        assert len(cards) == 8
         for card in cards:
-            card.suit = suit
+            assert card.suit == suit
 
 def test_generate_rank():
     for rank in Rank:
         cards = Deck.generate_rank(rank)
+        assert len(cards) == 4
         for card in cards:
-            card.rank = rank
+            assert card.rank == rank
