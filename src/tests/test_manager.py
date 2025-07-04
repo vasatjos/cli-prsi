@@ -64,3 +64,73 @@ def test_find_allowed_actual_is_different_from_top():
     should_be_allowed = Deck.generate_suit(Suit.LEAVES) | Deck.generate_rank(Rank.OBER)
     allowed = manager.find_allowed_cards()
     assert should_be_allowed == allowed
+
+
+def test_set_card_effect_ace():
+    manager = GameStateManager()
+    manager._actual_suit = Suit.LEAVES
+    manager.top_card = Card(Suit.LEAVES, Rank.NINE)
+    manager.current_effect = None
+    manager.effect_strength = 0
+
+    manager.update(Card(Suit.LEAVES, Rank.ACE))
+
+    assert manager.current_effect is CardEffect.SKIP_TURN
+    assert manager.effect_strength == 1
+
+
+def test_set_card_effect_seven():
+    manager = GameStateManager()
+    manager._actual_suit = Suit.LEAVES
+    manager.top_card = Card(Suit.LEAVES, Rank.NINE)
+    manager.current_effect = None
+    manager.effect_strength = 0
+
+    manager.update(Card(Suit.LEAVES, Rank.SEVEN))
+
+    assert manager.current_effect is CardEffect.DRAW_TWO
+    assert manager.effect_strength == 1
+
+
+def test_set_card_effect_stacking():
+    manager = GameStateManager()
+    manager._actual_suit = Suit.LEAVES
+    manager.top_card = Card(Suit.LEAVES, Rank.SEVEN)
+    manager.current_effect = CardEffect.SKIP_TURN
+    manager.effect_strength = 2
+
+    manager.update(Card(Suit.HEARTS, Rank.SEVEN))
+
+    assert manager.current_effect is CardEffect.DRAW_TWO
+    assert manager.effect_strength == 3
+
+
+def test_set_card_effect_change_suit(monkeypatch):
+    manager = GameStateManager()
+    manager._actual_suit = Suit.LEAVES
+    manager.top_card = Card(Suit.LEAVES, Rank.SEVEN)
+    manager.current_effect = None
+    manager.effect_strength = 0
+
+    monkeypatch.setattr("builtins.input", lambda _: "b")
+    manager.update(Card(Suit.HEARTS, Rank.OBER))
+
+    assert manager.current_effect is None
+    assert manager.effect_strength == 0
+    assert manager.top_card == Card(Suit.HEARTS, Rank.OBER)
+    assert manager._actual_suit == Suit.BELLS
+
+
+def test_set_card_effect_reset_on_draw():
+    manager = GameStateManager()
+    manager._actual_suit = Suit.LEAVES
+    manager.top_card = Card(Suit.LEAVES, Rank.SEVEN)
+    manager.current_effect = None
+    manager.effect_strength = 0
+
+    manager.update()
+
+    assert manager.current_effect is None
+    assert manager.effect_strength == 0
+    assert manager.top_card == Card(Suit.LEAVES, Rank.SEVEN)
+    assert manager._actual_suit == Suit.LEAVES
