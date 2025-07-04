@@ -15,7 +15,7 @@ class GameStateManager:
         self.current_effect: CardEffect | None = None
         self.effect_strength: int = 0  # values range from 0 to 4 (draw 8 cards)
 
-    def update(self, card: Card | None) -> None:
+    def update(self, card: Card | None = None) -> None:
         if card is None:
             self.current_effect = None  # No card was played -> No effect
             self.effect_strength = 0
