@@ -20,8 +20,11 @@ class Card:
         else:
             self.effect = None
 
-    def __repr__(self):
+    def __str__(self):
         return f"{self.rank} of {self.suit}"
+
+    def __repr__(self):
+        return f"Card(rank={self.rank}, suit={self.suit}, effect={self.effect}"
 
     def __lt__(self, other) -> bool:
         return (
