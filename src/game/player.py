@@ -30,7 +30,7 @@ class Player:
           Otherwise simply the card the player chose to play.
         """
 
-        playable = list(self._hand_set.intersection(allowed))
+        playable = list(self._hand_set & allowed)
         if len(playable) == 0:
             input("No cards available, press enter to draw.")
             return None
