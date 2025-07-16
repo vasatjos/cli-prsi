@@ -4,7 +4,10 @@ from game.deck import Deck
 from game.player import Player
 
 def test_choose_playing_card_allowed(monkeypatch):
-    allowed = set(Deck().drawing_pile)
+    allowed: set[Card] = set()
+    for suit in Suit:
+        cards = set(Deck.generate_suit(suit))
+        allowed |= cards
 
     player = Player()
     c1 = Card(Suit.HEARTS, Rank.TEN)

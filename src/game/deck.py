@@ -18,6 +18,9 @@ class Deck:
         self.drawing_pile = [Card(suit, rank) for suit in Suit for rank in Rank]
         shuffle(self.drawing_pile)
 
+        top_card = self.draw_card()
+        self.play_card(top_card)
+
     @staticmethod
     def generate_suit(suit: Suit) -> set[Card]:
         return {Card(suit, rank) for rank in Rank}
@@ -39,7 +42,7 @@ class Deck:
 
         # Flip over playing pile
         playing_pile_top_card = self.discard_pile.pop()
-        self.drawing_pile = list(reversed(self.discard_pile))
+        self.drawing_pile = self.discard_pile[::-1]
         self.discard_pile = [playing_pile_top_card]
 
         return self.drawing_pile.pop()

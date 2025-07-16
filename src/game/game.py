@@ -45,13 +45,15 @@ class Prsi:
                 player.take_drawn_cards([self._deck.draw_card()])
 
     def start_game(self) -> None:
-        self._player_count = self._print_menu()
-        if not self._player_count:
-            return
-        self._players = [Player() for _ in range(self._player_count)]
-        self._deal()
-
-        self._game_loop()
+        while True:
+            self._player_count = self._print_menu()
+            if not self._player_count:
+                return
+            self._deck.reset()
+            self._players = [Player() for _ in range(self._player_count)]
+            self._effect_manager.update(self._deck.discard_pile[0])
+            self._deal()
+            self._game_loop()
 
     def _game_loop(self) -> None:
         while True:

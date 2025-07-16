@@ -6,8 +6,8 @@ from game.deck import Deck
 def test_deck_initialization():
     deck = Deck()
     # Check total number of cards
-    assert len(deck.drawing_pile) == Deck.CARD_COUNT
-    assert len(deck.discard_pile) == 0
+    assert len(deck.drawing_pile) == Deck.CARD_COUNT - 1
+    assert len(deck.discard_pile) == 1
 
 
 def test_draw_card_reduces_drawpile():
