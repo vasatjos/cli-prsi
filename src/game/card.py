@@ -21,7 +21,8 @@ class Card:
             self.effect = None
 
     def __str__(self):
-        return f"{self.rank} of {self.suit}"
+        # TODO: Make suits print in different colors
+        return f"{self.rank.name} of {self.suit}"
 
     def __repr__(self):
         return f"Card(rank={self.rank}, suit={self.suit}, effect={self.effect}"

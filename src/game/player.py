@@ -2,10 +2,18 @@ from game.card import Card
 
 
 class Player:
-    def __init__(self) -> None:
+    def __init__(self, id: int) -> None:
         self._hand_set: set[Card] = set()
+        self._id = id
 
-    def print_hand(self, cards: list[Card] | None) -> None:
+    @property
+    def id(self):
+        return self._id
+
+    def __eq__(self, other) -> bool:
+        return self._id == other._id
+
+    def print_hand(self, cards: list[Card] | None = None) -> None:
         """
         Print given cards in a sorted order.
         """

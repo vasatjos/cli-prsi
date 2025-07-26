@@ -1,6 +1,8 @@
 import os
 
+from game.card_utils import CardEffect
 from game.deck import Deck
+from game.card import Card
 from game.player import Player
 from game.state_manager import GameStateManager
 
@@ -14,6 +16,7 @@ class Prsi:
         self._players: list[Player] = []
         self._deck: Deck = Deck()
         self._effect_manager: GameStateManager = GameStateManager()
+        self._last_winner: Player | None = None
 
     @staticmethod
     def _print_menu() -> int:
@@ -44,17 +47,55 @@ class Prsi:
             for player in self._players:
                 player.take_drawn_cards([self._deck.draw_card()])
 
+
+    def _reset_screen(self) -> None:
+        os.system("clear")
+        input("Press enter to start your turn.")
+        os.system("clear")
+
+        print(f"Current top card: {self._deck.discard_pile[-1]}\n")
+
     def start_game(self) -> None:
         while True:
             self._player_count = self._print_menu()
             if not self._player_count:
                 return
             self._deck.reset()
-            self._players = [Player() for _ in range(self._player_count)]
+            self._players = [Player(i) for i in range(self._player_count)]
             self._effect_manager.update(self._deck.discard_pile[0])
             self._deal()
             self._game_loop()
 
     def _game_loop(self) -> None:
+        if not 2 <= self._player_count <= Prsi.MAX_PLAYER_COUNT:
+            raise RuntimeError("Player count not valid.")
         while True:
-            pass
+            for player in self._players:
+                # TODO: Update last winner for changing player counts
+                if self._last_winner is not None and player != self._last_winner:
+                    continue  # start with last winner
+                self._last_winner = None
+
+                # TODO: Fix first card being a jack
+                self._reset_screen()
+                print("Current cards on hand:")
+                player.print_hand()
+                allowed = self._effect_manager.find_allowed_cards()
+                print("\nPlayable cards:")
+                player_choice = player.select_card_to_play(allowed)
+                print()
+
+                if player_choice is not None:
+                    self._deck.play_card(player_choice)
+                else:
+                    # TODO: Draw multiple on 7s
+                    # TODO: Improve turn skipping logic
+                    drawn = [self._deck.draw_card()]
+                    if self._effect_manager.current_effect is CardEffect.SKIP_TURN:
+                        drawn: list[Card] = []
+                    player.take_drawn_cards(drawn)
+
+                self._effect_manager.update(player_choice)
+
+            if self._last_winner is not None:
+                break

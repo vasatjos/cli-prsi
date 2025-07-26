@@ -11,9 +11,9 @@ class Deck:
         self.discard_pile: list[Card]
         self.drawing_pile: list[Card]
 
-        self.reset_deck()
+        self.reset()
 
-    def reset_deck(self) -> None:
+    def reset(self) -> None:
         self.discard_pile: list[Card] = []
         self.drawing_pile = [Card(suit, rank) for suit in Suit for rank in Rank]
         shuffle(self.drawing_pile)

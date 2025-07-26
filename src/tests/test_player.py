@@ -9,7 +9,7 @@ def test_choose_playing_card_allowed(monkeypatch):
         cards = set(Deck.generate_suit(suit))
         allowed |= cards
 
-    player = Player()
+    player = Player(0)
     c1 = Card(Suit.HEARTS, Rank.TEN)
     c2 = Card(Suit.HEARTS, Rank.SEVEN)
     c3 = Card(Suit.LEAVES, Rank.ACE)
@@ -27,7 +27,7 @@ def test_choose_playing_card_allowed(monkeypatch):
     assert player._hand_set == {c1, c3, c4}
 
 def test_choose_playing_card_with_no_allowed(monkeypatch):
-    player = Player()
+    player = Player(0)
     card = Card(Suit.HEARTS, Rank.TEN)
     player._hand_set.add(card)
 
@@ -42,7 +42,7 @@ def test_choose_playing_card_with_no_allowed(monkeypatch):
     assert card in player._hand_set  # card should remain in hand
 
 def test_choose_card_with_invalid_input(monkeypatch):
-    player = Player()
+    player = Player(0)
     c1 = Card(Suit.HEARTS, Rank.TEN)
     c2 = Card(Suit.HEARTS, Rank.SEVEN)
     player._hand_set.update([c1, c2])
