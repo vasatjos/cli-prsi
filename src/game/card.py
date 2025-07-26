@@ -1,6 +1,6 @@
 from functools import total_ordering
 
-from game.card_utils import Suit, Rank, CardEffect
+from game.card_utils import Suit, Rank, CardEffect, COLOR_RESET
 
 
 @total_ordering
@@ -22,10 +22,13 @@ class Card:
 
     def __str__(self):
         # TODO: Make suits print in different colors
-        return f"{self.rank.name} of {self.suit}"
+        return f"{self.suit.value}{self.rank.name} of {self.suit.name}{COLOR_RESET}"
 
     def __repr__(self):
-        return f"Card(rank={self.rank}, suit={self.suit}, effect={self.effect}"
+        return (
+            f"Card(rank={self.rank.name}, suit={self.suit.name}, "
+            + "effect={self.effect.name if self.effect is not None else None}"
+        )
 
     def __lt__(self, other) -> bool:
         return (

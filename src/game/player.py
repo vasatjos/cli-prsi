@@ -45,6 +45,7 @@ class Player:
         self.print_hand(playable)
 
         while True:
+            # TODO: Change "0 to draw" to "empty input to draw"
             choice_input = input(
                 "Enter the number of the card you want to play, "
                 + "enter 0 to draw a card: "

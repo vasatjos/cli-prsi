@@ -1,6 +1,6 @@
 import os
 
-from game.card_utils import CardEffect
+from game.card_utils import CardEffect, COLOR_RESET
 from game.deck import Deck
 from game.card import Card
 from game.player import Player
@@ -27,6 +27,7 @@ class Prsi:
           The number of players who will be playing. 0 is returned if the user
           wishes to exit.
         """
+        os.system("clear")
         while True:
             user_input = input(
                 "Please select the number of players (2-6). Enter 0 to exit: "
@@ -39,7 +40,6 @@ class Prsi:
                     return 0
                 return num_players
             except ValueError:
-                os.system("clear")
                 print("Please insert a valid number of players.")
 
     def _deal(self) -> None:
@@ -52,7 +52,17 @@ class Prsi:
         input("Press enter to start your turn.")
         os.system("clear")
 
-        print(f"Current top card: {self._deck.discard_pile[-1]}\n")
+        print(f"Current top card: {self._effect_manager.top_card}")
+
+        assert self._effect_manager.actual_suit
+        assert self._effect_manager.top_card
+        if self._effect_manager.actual_suit != self._effect_manager.top_card.suit:
+            print(
+                f"Current suit: {self._effect_manager.actual_suit.value}"
+                + f"{self._effect_manager.actual_suit.name}{COLOR_RESET}"
+            )
+
+        print()
 
     def start_game(self) -> None:
         while True:
@@ -95,6 +105,8 @@ class Prsi:
                     player.take_drawn_cards(drawn)
 
                 self._effect_manager.update(player_choice)
+
+                # TODO: Implement winning
 
             if self._last_winner is not None:
                 break

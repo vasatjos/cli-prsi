@@ -1,11 +1,13 @@
 from enum import Enum, StrEnum, IntEnum
 
+COLOR_RESET = "\033[0m"
+
 
 class Suit(StrEnum):
-    HEARTS = "hearts"
-    LEAVES = "leaves"
-    BELLS = "bells"
-    ACORNS = "acorns"
+    HEARTS = "\033[31m"
+    LEAVES = "\033[32m"
+    BELLS = "\033[34m"
+    ACORNS = "\033[33m"
 
 
 class Rank(IntEnum):

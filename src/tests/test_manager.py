@@ -32,7 +32,7 @@ def test_get_suit_choice_retry(monkeypatch):
 
 def test_find_allowed_sevens():
     manager = GameStateManager()
-    manager._actual_suit = Suit.BELLS
+    manager.actual_suit = Suit.BELLS
     manager.top_card = Card(Suit.BELLS, Rank.SEVEN)
     manager.current_effect = CardEffect.DRAW_TWO
     manager.effect_strength = 1
@@ -44,7 +44,7 @@ def test_find_allowed_sevens():
 
 def test_find_allowed_aces():
     manager = GameStateManager()
-    manager._actual_suit = Suit.HEARTS
+    manager.actual_suit = Suit.HEARTS
     manager.top_card = Card(Suit.HEARTS, Rank.ACE)
     manager.current_effect = CardEffect.SKIP_TURN
     manager.effect_strength = 1
@@ -56,7 +56,7 @@ def test_find_allowed_aces():
 
 def test_find_allowed_actual_is_different_from_top():
     manager = GameStateManager()
-    manager._actual_suit = Suit.LEAVES
+    manager.actual_suit = Suit.LEAVES
     manager.top_card = Card(Suit.HEARTS, Rank.OBER)
     manager.current_effect = None
     manager.effect_strength = 0
@@ -68,7 +68,7 @@ def test_find_allowed_actual_is_different_from_top():
 
 def test_set_card_effect_ace():
     manager = GameStateManager()
-    manager._actual_suit = Suit.LEAVES
+    manager.actual_suit = Suit.LEAVES
     manager.top_card = Card(Suit.LEAVES, Rank.NINE)
     manager.current_effect = None
     manager.effect_strength = 0
@@ -81,7 +81,7 @@ def test_set_card_effect_ace():
 
 def test_set_card_effect_seven():
     manager = GameStateManager()
-    manager._actual_suit = Suit.LEAVES
+    manager.actual_suit = Suit.LEAVES
     manager.top_card = Card(Suit.LEAVES, Rank.NINE)
     manager.current_effect = None
     manager.effect_strength = 0
@@ -94,7 +94,7 @@ def test_set_card_effect_seven():
 
 def test_set_card_effect_stacking():
     manager = GameStateManager()
-    manager._actual_suit = Suit.LEAVES
+    manager.actual_suit = Suit.LEAVES
     manager.top_card = Card(Suit.LEAVES, Rank.SEVEN)
     manager.current_effect = CardEffect.SKIP_TURN
     manager.effect_strength = 2
@@ -107,7 +107,7 @@ def test_set_card_effect_stacking():
 
 def test_set_card_effect_change_suit(monkeypatch):
     manager = GameStateManager()
-    manager._actual_suit = Suit.LEAVES
+    manager.actual_suit = Suit.LEAVES
     manager.top_card = Card(Suit.LEAVES, Rank.SEVEN)
     manager.current_effect = None
     manager.effect_strength = 0
@@ -118,12 +118,12 @@ def test_set_card_effect_change_suit(monkeypatch):
     assert manager.current_effect is None
     assert manager.effect_strength == 0
     assert manager.top_card == Card(Suit.HEARTS, Rank.OBER)
-    assert manager._actual_suit == Suit.BELLS
+    assert manager.actual_suit == Suit.BELLS
 
 
 def test_set_card_effect_reset_on_draw():
     manager = GameStateManager()
-    manager._actual_suit = Suit.LEAVES
+    manager.actual_suit = Suit.LEAVES
     manager.top_card = Card(Suit.LEAVES, Rank.SEVEN)
     manager.current_effect = None
     manager.effect_strength = 0
@@ -133,4 +133,4 @@ def test_set_card_effect_reset_on_draw():
     assert manager.current_effect is None
     assert manager.effect_strength == 0
     assert manager.top_card == Card(Suit.LEAVES, Rank.SEVEN)
-    assert manager._actual_suit == Suit.LEAVES
+    assert manager.actual_suit == Suit.LEAVES
