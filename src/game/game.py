@@ -47,7 +47,6 @@ class Prsi:
             for player in self._players:
                 player.take_drawn_cards([self._deck.draw_card()])
 
-
     def _reset_screen(self) -> None:
         os.system("clear")
         input("Press enter to start your turn.")
@@ -57,18 +56,19 @@ class Prsi:
 
     def start_game(self) -> None:
         while True:
-            self._player_count = self._print_menu()
+            self._player_count = Prsi._print_menu()
             if not self._player_count:
                 return
             self._deck.reset()
             self._players = [Player(i) for i in range(self._player_count)]
-            self._effect_manager.update(self._deck.discard_pile[0])
+            self._effect_manager.update(self._deck.discard_pile[0], first_card=True)
             self._deal()
             self._game_loop()
 
     def _game_loop(self) -> None:
         if not 2 <= self._player_count <= Prsi.MAX_PLAYER_COUNT:
             raise RuntimeError("Player count not valid.")
+
         while True:
             for player in self._players:
                 # TODO: Update last winner for changing player counts
@@ -76,7 +76,6 @@ class Prsi:
                     continue  # start with last winner
                 self._last_winner = None
 
-                # TODO: Fix first card being a jack
                 self._reset_screen()
                 print("Current cards on hand:")
                 player.print_hand()

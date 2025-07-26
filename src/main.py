@@ -1,5 +1,6 @@
 from game.game import Prsi
 
+
 def main() -> None:
     game = Prsi()
     game.start_game()
