@@ -11,6 +11,8 @@ class Player:
         return self._id
 
     def __eq__(self, other) -> bool:
+        if not isinstance(other, Player):
+            return NotImplemented
         return self._id == other._id
 
     def print_hand(self, cards: list[Card] | None = None) -> None:
@@ -33,8 +35,7 @@ class Player:
             and active effects.
 
         Returns:
-          None if player chose to draw a card. Drawing logic handled by separate method,
-          handling of this behaviour falls on the caller.
+          None if player chose to draw a card.
           Otherwise simply the card the player chose to play.
         """
 
@@ -45,7 +46,6 @@ class Player:
         self.print_hand(playable)
 
         while True:
-            # TODO: Change "0 to draw" to "empty input to draw"
             choice_input = input(
                 "Enter the number of the card you want to play, "
                 + "don't enter anything to draw a card: "

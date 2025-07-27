@@ -36,7 +36,7 @@ class GameStateManager:
             self.current_effect = None
             self.effect_strength = 0
             chosen_suit = (
-                GameStateManager.get_suit_choice() if not first_card else card.suit
+                GameStateManager._get_suit_choice() if not first_card else card.suit
             )
             self.top_card = card
             self.actual_suit = chosen_suit
@@ -48,7 +48,7 @@ class GameStateManager:
             self.actual_suit = card.suit
 
     @staticmethod
-    def get_suit_choice() -> Suit:
+    def _get_suit_choice() -> Suit:
         suit_names = [
             f"{suit.value}({suit.name[0]}){suit.name[1:]}{COLOR_RESET}" for suit in Suit
         ]

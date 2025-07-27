@@ -49,7 +49,7 @@ class Prsi:
                 player.take_drawn_cards([self._deck.draw_card()])
 
     def _reset_screen(self, player_id: int) -> None:
-        player_id += 1 # one based index
+        player_id += 1  # one based index
         os.system("clear")
         input(f"Press enter to start player #{player_id} turn.")
         os.system("clear")
@@ -81,6 +81,21 @@ class Prsi:
             self._deal()
             self._game_loop()
 
+    def _draw_cards(self) -> list[Card]:
+        drawn: list[Card] = []
+
+        match self._effect_manager.current_effect:
+            case CardEffect.DRAW_TWO:
+                for _ in range(self._effect_manager.effect_strength):
+                    drawn.append(self._deck.draw_card())
+                    drawn.append(self._deck.draw_card())
+            case CardEffect.SKIP_TURN:
+                pass
+            case _:
+                drawn.append(self._deck.draw_card())
+
+        return drawn
+
     def _game_loop(self) -> None:
         if not 2 <= self._player_count <= Prsi.MAX_PLAYER_COUNT:
             raise RuntimeError("Player count not valid.")
@@ -101,23 +116,14 @@ class Prsi:
 
                 if player_choice is not None:
                     self._deck.play_card(player_choice)
+
                     if not len(player._hand_set):
                         self._last_winner = player
                         input("Congratulations, you win! Press enter to continue.")
                         break
+
                 else:
-                    drawn: list[Card] = []
-
-                    match self._effect_manager.current_effect:
-                        case CardEffect.DRAW_TWO:
-                            for _ in range(self._effect_manager.effect_strength):
-                                drawn.append(self._deck.draw_card())
-                                drawn.append(self._deck.draw_card())
-                        case CardEffect.SKIP_TURN:
-                            pass
-                        case _:
-                            drawn.append(self._deck.draw_card())
-
+                    drawn: list[Card] = self._draw_cards()
                     player.take_drawn_cards(drawn)
 
                 self._effect_manager.update(player_choice)
