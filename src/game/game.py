@@ -1,6 +1,6 @@
 import os
 
-from game.card_utils import CardEffect, COLOR_RESET
+from game.card_utils import CardEffect, COLOR_RESET, Rank
 from game.deck import Deck
 from game.card import Card
 from game.player import Player
@@ -48,8 +48,8 @@ class Prsi:
             for player in self._players:
                 player.take_drawn_cards([self._deck.draw_card()])
 
-    def _reset_screen(self, player_id: int) -> None:
-        player_id += 1  # one based index
+    def _get_player_card_choice(self, player: Player) -> Card | None:
+        player_id = player.id + 1  # print with one based index
         os.system("clear")
         input(f"Press enter to start player #{player_id} turn.")
         os.system("clear")
@@ -60,13 +60,20 @@ class Prsi:
         assert self._effect_manager.actual_suit
         assert self._effect_manager.top_card
 
-        if self._effect_manager.actual_suit != self._effect_manager.top_card.suit:
+        if self._effect_manager.top_card.rank is Rank.OBER:
             print(
                 f"Current suit: {self._effect_manager.actual_suit.value}"
-                + f"{self._effect_manager.actual_suit.name}{COLOR_RESET}"
+                + f"{self._effect_manager.actual_suit.name}{COLOR_RESET}\n"
             )
 
+        print("Current cards on hand:")
+        player.print_hand()
+        allowed = self._effect_manager.find_allowed_cards()
+        print("\nPlayable cards:")
+        player_choice = player.select_card_to_play(allowed)
         print()
+
+        return player_choice
 
     def start_game(self) -> None:
         while True:
@@ -106,17 +113,12 @@ class Prsi:
                     continue  # start with last winner
                 self._last_winner = None
 
-                self._reset_screen(player.id)
-                print("Current cards on hand:")
-                player.print_hand()
-                allowed = self._effect_manager.find_allowed_cards()
-                print("\nPlayable cards:")
-                player_choice = player.select_card_to_play(allowed)
-                print()
+                player_choice = self._get_player_card_choice(player)
 
                 if player_choice is not None:
                     self._deck.play_card(player_choice)
 
+                    # TODO: Add returning to game on 7 of hearts
                     if not len(player._hand_set):
                         self._last_winner = player
                         input("Congratulations, you win! Press enter to continue.")
