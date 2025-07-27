@@ -17,6 +17,7 @@ class Prsi:
         self._deck: Deck = Deck()
         self._effect_manager: GameStateManager = GameStateManager()
         self._last_winner: Player | None = None
+        self._last_player_count: int = 0
 
     @staticmethod
     def _print_menu() -> int:
@@ -47,11 +48,13 @@ class Prsi:
             for player in self._players:
                 player.take_drawn_cards([self._deck.draw_card()])
 
-    def _reset_screen(self) -> None:
+    def _reset_screen(self, player_id: int) -> None:
+        player_id += 1 # one based index
         os.system("clear")
-        input("Press enter to start your turn.")
+        input(f"Press enter to start player #{player_id} turn.")
         os.system("clear")
 
+        print(f"Player #{player_id} currently playing.\n")
         print(f"Current top card: {self._effect_manager.top_card}")
 
         assert self._effect_manager.actual_suit
@@ -71,6 +74,8 @@ class Prsi:
                 return
             self._deck.reset()
             self._players = [Player(i) for i in range(self._player_count)]
+            if self._last_winner and self._last_player_count != self._players:
+                self._last_winner = None
             self._effect_manager.update(self._deck.discard_pile[0], first_card=True)
             self._deal()
             self._game_loop()
@@ -81,12 +86,11 @@ class Prsi:
 
         while True:
             for player in self._players:
-                # TODO: Update last winner for changing player counts
                 if self._last_winner is not None and player != self._last_winner:
                     continue  # start with last winner
                 self._last_winner = None
 
-                self._reset_screen()
+                self._reset_screen(player.id)
                 print("Current cards on hand:")
                 player.print_hand()
                 allowed = self._effect_manager.find_allowed_cards()
@@ -96,17 +100,26 @@ class Prsi:
 
                 if player_choice is not None:
                     self._deck.play_card(player_choice)
+                    if not len(player._hand_set):
+                        self._last_winner = player
+                        input("Congratulations, you win! Press enter to continue.")
+                        break
                 else:
-                    # TODO: Draw multiple on 7s
-                    # TODO: Improve turn skipping logic
-                    drawn = [self._deck.draw_card()]
-                    if self._effect_manager.current_effect is CardEffect.SKIP_TURN:
-                        drawn: list[Card] = []
+                    drawn: list[Card] = []
+
+                    match self._effect_manager.current_effect:
+                        case CardEffect.DRAW_TWO:
+                            for _ in range(self._effect_manager.effect_strength):
+                                drawn.append(self._deck.draw_card())
+                                drawn.append(self._deck.draw_card())
+                        case CardEffect.SKIP_TURN:
+                            pass
+                        case _:
+                            drawn.append(self._deck.draw_card())
+
                     player.take_drawn_cards(drawn)
 
                 self._effect_manager.update(player_choice)
-
-                # TODO: Implement winning
 
             if self._last_winner is not None:
                 break

@@ -40,7 +40,7 @@ class Player:
 
         playable = list(self._hand_set & allowed)
         if len(playable) == 0:
-            input("No cards available, press enter to draw.")
+            input("No cards available, press enter to draw/skip.")
             return None
         self.print_hand(playable)
 
@@ -48,24 +48,24 @@ class Player:
             # TODO: Change "0 to draw" to "empty input to draw"
             choice_input = input(
                 "Enter the number of the card you want to play, "
-                + "enter 0 to draw a card: "
+                + "don't enter anything to draw a card: "
             )
+            if choice_input == "":
+                return None
+
             try:
                 choice = int(choice_input)
-                if not 0 <= choice <= len(playable):
+                if not 0 < choice <= len(playable):
                     print("Inserted number too high.")
                     continue
                 break  # valid input
             except ValueError:
-                print("Please insert a number.")
+                print("Invalid input.")
 
         card_index = choice - 1  # type: ignore
-        if card_index >= 0:
-            chosen_card = playable[card_index]
-            self._hand_set.remove(chosen_card)
-            return chosen_card
-        else:
-            return None  # draw a card
+        chosen_card = playable[card_index]
+        self._hand_set.remove(chosen_card)
+        return chosen_card
 
     def take_drawn_cards(self, drawn_cards: list[Card]) -> None:
         self._hand_set.update(drawn_cards)
