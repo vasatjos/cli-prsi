@@ -2,18 +2,21 @@ from game.card import Card
 
 
 class Player:
-    def __init__(self, id: int) -> None:
+    def __init__(self, player_id: int) -> None:
         self._hand_set: set[Card] = set()
-        self._id = id
+        self._id = player_id
 
     @property
-    def id(self):
+    def id(self) -> int:
         return self._id
 
     def __eq__(self, other) -> bool:
         if not isinstance(other, Player):
             return NotImplemented
         return self._id == other._id
+
+    def has_cards(self) -> bool:
+        return len(self._hand_set) > 0
 
     def print_hand(self, cards: list[Card] | None = None) -> None:
         """
@@ -56,13 +59,13 @@ class Player:
             try:
                 choice = int(choice_input)
                 if not 0 < choice <= len(playable):
-                    print("Inserted number too high.")
+                    print("Invalid input.")
                     continue
                 break  # valid input
             except ValueError:
                 print("Invalid input.")
 
-        card_index = choice - 1  # type: ignore
+        card_index = choice - 1
         chosen_card = playable[card_index]
         self._hand_set.remove(chosen_card)
         return chosen_card

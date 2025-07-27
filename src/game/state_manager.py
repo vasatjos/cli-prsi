@@ -71,7 +71,7 @@ class GameStateManager:
         elif choice == "b":
             return Suit.BELLS
         else:
-            raise NotImplementedError("Suit choice failed.")
+            raise RuntimeError("Suit choice failed.")
 
     def find_allowed_cards(self) -> set[Card]:
         if self.current_effect is CardEffect.SKIP_TURN:

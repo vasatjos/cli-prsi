@@ -26,7 +26,7 @@ class Card:
     def __repr__(self) -> str:
         return (
             f"Card(rank={self.rank.name}, suit={self.suit.name}, "
-            + "effect={self.effect.name if self.effect is not None else None}"
+            + f"effect={self.effect.name if self.effect is not None else None}"
         )
 
     def __lt__(self, other) -> bool:

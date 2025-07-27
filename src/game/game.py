@@ -57,8 +57,11 @@ class Prsi:
         print(f"Player #{player_id} currently playing.\n")
         print(f"Current top card: {self._effect_manager.top_card}")
 
-        assert self._effect_manager.actual_suit
-        assert self._effect_manager.top_card
+        if (
+            self._effect_manager.actual_suit is None
+            or self._effect_manager.top_card is None
+        ):
+            raise RuntimeError("Manager not initialized.")
 
         if self._effect_manager.top_card.rank is Rank.OBER:
             print(
@@ -82,7 +85,7 @@ class Prsi:
                 return
             self._deck.reset()
             self._players = [Player(i) for i in range(self._player_count)]
-            if self._last_winner and self._last_player_count != self._players:
+            if self._last_winner and self._last_player_count != self._player_count:
                 self._last_winner = None
             self._effect_manager.update(self._deck.discard_pile[0], first_card=True)
             self._deal()
@@ -119,7 +122,7 @@ class Prsi:
                     self._deck.play_card(player_choice)
 
                     # TODO: Add returning to game on 7 of hearts
-                    if not len(player._hand_set):
+                    if not player.has_cards():
                         self._last_winner = player
                         input("Congratulations, you win! Press enter to continue.")
                         break

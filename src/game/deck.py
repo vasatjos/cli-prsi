@@ -5,7 +5,7 @@ from game.card import Card
 
 
 class Deck:
-    CARD_COUNT = len(Suit) * 8
+    CARD_COUNT = len(Suit) * len(Rank)
 
     def __init__(self) -> None:
         self.discard_pile: list[Card]
