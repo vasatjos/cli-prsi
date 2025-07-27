@@ -59,6 +59,7 @@ class Prsi:
 
         assert self._effect_manager.actual_suit
         assert self._effect_manager.top_card
+
         if self._effect_manager.actual_suit != self._effect_manager.top_card.suit:
             print(
                 f"Current suit: {self._effect_manager.actual_suit.value}"

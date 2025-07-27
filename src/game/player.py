@@ -22,7 +22,7 @@ class Player:
             cards = list(self._hand_set)
         cards.sort()
         for i, card in enumerate(cards, start=1):
-            print(f"{i}. {card}")
+            print(f"{i:>3}. {card}")
 
     def select_card_to_play(self, allowed: set[Card]) -> Card | None:
         """
