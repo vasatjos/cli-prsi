@@ -54,8 +54,12 @@ class Prsi:
         input(f"Press enter to start player #{player_id} turn.")
         os.system("clear")
 
-        print(f"Player #{player_id} currently playing.\n")
-        print(f"Current top card: {self._effect_manager.top_card}")
+        for p in self._players:
+            if p == player:
+                print(f"Player #{player_id} currently playing.")
+            else:
+                print(f"Player #{p.id + 1} has {p.card_count()} cards")
+        print(f"\nTop card: {self._effect_manager.top_card}")
 
         if (
             self._effect_manager.actual_suit is None
@@ -66,10 +70,10 @@ class Prsi:
         if self._effect_manager.top_card.rank is Rank.OBER:
             print(
                 f"Current suit: {self._effect_manager.actual_suit.value}"
-                + f"{self._effect_manager.actual_suit.name}{COLOR_RESET}\n"
+                + f"{self._effect_manager.actual_suit.name}{COLOR_RESET}"
             )
 
-        print("Current cards on hand:")
+        print("\nCards on hand:")
         player.print_hand()
         allowed = self._effect_manager.find_allowed_cards()
         print("\nPlayable cards:")
@@ -122,7 +126,7 @@ class Prsi:
                     self._deck.play_card(player_choice)
 
                     # TODO: Add returning to game on 7 of hearts
-                    if not player.has_cards():
+                    if not player.card_count():
                         self._last_winner = player
                         input("Congratulations, you win! Press enter to continue.")
                         break

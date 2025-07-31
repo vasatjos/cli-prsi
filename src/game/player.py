@@ -15,8 +15,8 @@ class Player:
             return NotImplemented
         return self._id == other._id
 
-    def has_cards(self) -> bool:
-        return len(self._hand_set) > 0
+    def card_count(self) -> int:
+        return len(self._hand_set)
 
     def print_hand(self, cards: list[Card] | None = None) -> None:
         """
