@@ -1,6 +1,6 @@
+import os
 from game.game import Prsi
 
-import os
 
 def main() -> None:
     game = Prsi()

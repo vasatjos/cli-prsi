@@ -28,13 +28,15 @@ def test_play_card_sets_effect():
     assert deck.discard_pile[-1] == card
     assert effect == CardEffect.DRAW_TWO
 
+
 def test_play_card_sets_no_effect():
     deck = Deck()
     card = Card(Suit.LEAVES, Rank.NINE)
     effect = deck.play_card(card)
 
     assert deck.discard_pile[-1] == card
-    assert effect == None
+    assert effect is None
+
 
 def test_generate_suit():
     for suit in Suit:
@@ -42,6 +44,7 @@ def test_generate_suit():
         assert len(cards) == 8
         for card in cards:
             assert card.suit == suit
+
 
 def test_generate_rank():
     for rank in Rank:

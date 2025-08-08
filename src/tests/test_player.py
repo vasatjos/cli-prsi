@@ -3,6 +3,7 @@ from game.card_utils import Rank, Suit
 from game.deck import Deck
 from game.player import Player
 
+
 def test_choose_playing_card_allowed(monkeypatch):
     allowed: set[Card] = set()
     for suit in Suit:
@@ -26,6 +27,7 @@ def test_choose_playing_card_allowed(monkeypatch):
     assert selected not in player._hand_set  # card should be removed from hand
     assert player._hand_set == {c1, c3, c4}
 
+
 def test_choose_playing_card_with_no_allowed(monkeypatch):
     player = Player(0)
     card = Card(Suit.HEARTS, Rank.TEN)
@@ -40,6 +42,7 @@ def test_choose_playing_card_with_no_allowed(monkeypatch):
 
     assert result is None
     assert card in player._hand_set  # card should remain in hand
+
 
 def test_choose_card_with_invalid_input(monkeypatch):
     player = Player(0)

@@ -64,14 +64,13 @@ class GameStateManager:
 
         if choice == "h":
             return Suit.HEARTS
-        elif choice == "l":
+        if choice == "l":
             return Suit.LEAVES
-        elif choice == "a":
+        if choice == "a":
             return Suit.ACORNS
-        elif choice == "b":
+        if choice == "b":
             return Suit.BELLS
-        else:
-            raise RuntimeError("Suit choice failed.")
+        raise RuntimeError("Suit choice failed.")
 
     def find_allowed_cards(self) -> set[Card]:
         if self.current_effect is CardEffect.SKIP_TURN:
