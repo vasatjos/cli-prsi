@@ -12,7 +12,7 @@ class Player:
 
     def __eq__(self, other) -> bool:
         if not isinstance(other, Player):
-            return NotImplemented
+            return False
         return self._id == other._id
 
     def card_count(self) -> int:
