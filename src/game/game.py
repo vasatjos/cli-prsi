@@ -101,7 +101,7 @@ class Prsi:
     def _draw_cards(self) -> list[Card]:
         match self._effect_manager.current_effect:
             case CardEffect.DRAW_TWO:
-                drawn: list[Card] = []
+                drawn = []
                 for _ in range(self._effect_manager.effect_strength):
                     drawn.append(self._deck.draw_card())
                     drawn.append(self._deck.draw_card())
@@ -146,9 +146,8 @@ class Prsi:
 
         if player_choice is not None:
             self._deck.play_card(player_choice)
-
         else:
-            drawn: list[Card] = self._draw_cards()
+            drawn = self._draw_cards()
             player.take_drawn_cards(drawn)
 
         self._effect_manager.update(player_choice)
