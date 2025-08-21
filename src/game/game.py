@@ -47,7 +47,7 @@ class Prsi:
             for player in self._players:
                 player.take_drawn_cards([self._deck.draw_card()])
 
-    def _get_player_card_choice(self, player: Player) -> Card | None:
+    def _print_game_state(self, player: Player) -> None:
         player_id = player.id + 1  # print with one based index
         os.system("clear")
         input(f"Press enter to start player #{player_id} turn.")
@@ -74,6 +74,9 @@ class Prsi:
 
         print("\nCards on hand:")
         player.print_hand()
+
+    def _get_player_card_choice(self, player: Player) -> Card | None:
+        self._print_game_state(player)
         allowed = self._effect_manager.find_allowed_cards()
         print("\nPlayable cards:")
         player_choice = player.select_card_to_play(allowed)
